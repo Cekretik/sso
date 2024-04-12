@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log/slog"
 	"os"
 	"sso/internal/config"
@@ -15,7 +14,15 @@ const (
 
 func main() {
 	cfg := config.MustLoad()
-	fmt.Println(cfg)
+	log := setupLogger(cfg.Env)
+	log.Info("Starting sso",
+		slog.String("env", cfg.Env),
+		slog.Any("config", cfg),
+		slog.Int("port", cfg.GRPC.Port),
+	)
+	log.Debug("debugging")
+	log.Error("error")
+	log.Warn("warn")
 }
 
 func setupLogger(env string) *slog.Logger {
