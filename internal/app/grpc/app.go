@@ -1,7 +1,9 @@
 package grpcapp
 
 import (
+	"fmt"
 	"log/slog"
+	"net"
 	authgrpc "sso/internal/grpc/auth"
 
 	"google.golang.org/grpc"
@@ -22,4 +24,23 @@ func New(log *slog.Logger, port int) *App {
 		gRPCServer: gRPCServer,
 		port:       port,
 	}
+}
+
+func (a *App) Run() error {
+	const op = "grpcapp.Run"
+
+	log := a.log.With(slog.String("op", op), slog.Int("port", a.port))
+
+	l, err := net.Listen("tcp", fmt.Sprintf(":%d", a.port))
+	if err != nil {
+		return fmt.Errorf("%s: %w", op, err)
+	}
+
+	log.Info("gRPC server is running", slog.String("addr", l.Addr().String()))
+
+	if err := a.gRPCServer.Serve(l); err != nil {
+		return fmt.Errorf("%s: %w", op, err)
+	}
+
+	return nil
 }

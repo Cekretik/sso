@@ -2,6 +2,7 @@ package app
 
 import (
 	"log/slog"
+	grpcapp "sso/internal/app/grpc"
 	"time"
 )
 
