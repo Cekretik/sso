@@ -16,5 +16,13 @@ func Register(gRPC *grpc.Server) {
 }
 
 func (s *serverAPI) Login(ctx context.Context, req *ssov1.LoginRequest) (*ssov1.LoginResponse, error) {
-	panic("not implemented")
+	panic("implent me")
+}
+
+func (s *serverAPI) Register(ctx context.Context, req *ssov1.RegisterRequest) (*ssov1.RegisterResponse, error) {
+	panic("implent me")
+}
+
+func (s *serverAPI) IsAdmin(ctx context.Context, req *ssov1.IsAdminRequest) (*ssov1.IsAdminResponse, error) {
+	panic("implent me")
 }
