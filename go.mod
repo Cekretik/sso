@@ -5,6 +5,7 @@ go 1.22.0
 require (
 	github.com/Cekretik/sso_proto v0.0.0-20240415105258-900ff03ff480
 	github.com/ilyakaznacheev/cleanenv v1.5.0
+	golang.org/x/crypto v0.19.0
 	google.golang.org/grpc v1.63.2
 )
 
