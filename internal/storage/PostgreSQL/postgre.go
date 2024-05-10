@@ -16,9 +16,10 @@ type Storage struct {
 	db *gorm.DB
 }
 
+var storagePath = "host=localhost password=gopher user=postgres dbname=sso port=5432 sslmode=disable"
+
 func New() (*Storage, error) {
 	const op = "storage.PostgreSQL.New"
-	storagePath := "host=localhost user=postgres dbname=sso sslmode=disable"
 	db, err := gorm.Open(postgres.Open(storagePath), &gorm.Config{})
 	if err != nil {
 		return nil, fmt.Errorf("%s: %w", op, err)
@@ -73,4 +74,19 @@ func (s *Storage) IsAdmin(ctx context.Context, userID int64) (bool, error) {
 	}
 
 	return user.IsAdmin, nil
+}
+
+func (s *Storage) App(ctx context.Context, appID int) (models.App, error) {
+	const op = "storage.PostgreSQL.App"
+	var app models.App
+
+	if err := s.db.Select("id, name, secret").Where("id = ?", appID).First(&app).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return app, fmt.Errorf("%s: %w", op, storage.ErrAppNotFound)
+		}
+
+		return app, fmt.Errorf("%s: %w", op, err)
+	}
+
+	return app, nil
 }
