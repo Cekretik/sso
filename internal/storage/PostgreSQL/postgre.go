@@ -25,6 +25,10 @@ func New() (*Storage, error) {
 		return nil, fmt.Errorf("%s: %w", op, err)
 	}
 
+	err = db.AutoMigrate(&models.User{}, &models.App{})
+	if err != nil {
+		return nil, fmt.Errorf("%s: %w", op, err)
+	}
 	return &Storage{db: db}, nil
 }
 
